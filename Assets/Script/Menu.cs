@@ -22,11 +22,6 @@ public class Menu : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
-    public void HowToPlay()
-    {
-       //
-    }
-
     public void Quit()
     {
         Application.Quit();
