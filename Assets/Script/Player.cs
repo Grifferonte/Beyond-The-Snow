@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +12,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float m_TemperatureMax;
     private enum _Zone { SNOW, DEEPSNOW, SAFEPLACE };
     private _Zone m_Zone;
+    private int m_Branch;
+    private bool isColliding;
 
     // Start is called before the first frame update
     void Start()
@@ -20,15 +21,43 @@ public class Player : MonoBehaviour
         m_HP = m_HPMax;
         m_Temperature = m_TemperatureMax;
         m_Zone = _Zone.DEEPSNOW;
+        m_Branch = 0;
+        isColliding = false;
+    }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.tag == "Branch")
+        {
+            if (isColliding) return;
+            isColliding = true;
+            m_Branch += 1;
+            Debug.Log(m_Branch);
+            Destroy(col.gameObject);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        isColliding = false;
+
+        if(Physics.OverlapSphere(gameObject.transform.position,5f,7).Length != 0 && m_Zone == _Zone.DEEPSNOW){
+            HasChangedZone("snow");
+            HasChangedSpeed(20);
+        }else if(Physics.OverlapSphere(gameObject.transform.position,5f,7).Length == 0 && m_Zone == _Zone.SNOW){
+            HasChangedZone("deepsnow");
+            HasChangedSpeed(10);
+        }
+
         if (Input.GetKeyDown(KeyCode.C))
         {
-            HasChangedSpeed(12);
+            if (m_Branch >= 3)
+            {
+                m_Branch -= 3;
+                Debug.Log(m_Branch);
+                m_Zone = _Zone.SAFEPLACE;
+            }
         }
         if (Input.GetKeyDown(KeyCode.V))
         {
@@ -42,7 +71,6 @@ public class Player : MonoBehaviour
             if (m_Temperature > 0)
             {
                 m_Temperature -= m_TemperatureLoss * Time.deltaTime;
-                Debug.Log(m_Temperature);
             }
         }
         if (m_Zone == _Zone.SNOW)
@@ -114,4 +142,6 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Game Over");
     }
+
+
 }
