@@ -25,10 +25,12 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalMove = joystick.Horizontal;
         verticalMove = joystick.Vertical;
-       
-        Debug.Log(verticalMove);
-        Debug.Log(horizontalMove);
         Vector3 move = transform.right * horizontalMove + transform.forward*verticalMove;
         m_CharCtrl.Move(move * runSpeed * Time.deltaTime);
+    }
+
+    public void SpeedChange(int speed){
+        runSpeed = speed;
+        Debug.Log(speed);
     }
 }
