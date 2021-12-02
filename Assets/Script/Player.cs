@@ -41,11 +41,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         isColliding = false;
-
-        if(Physics.OverlapSphere(gameObject.transform.position,5f,7).Length != 0 && m_Zone == _Zone.DEEPSNOW){
+        Debug.Log(Physics.OverlapSphere(gameObject.transform.position,5f,1<<7).Length);
+        if(Physics.OverlapSphere(gameObject.transform.position,5f,1<<7).Length != 0 && m_Zone == _Zone.DEEPSNOW){
             HasChangedZone("snow");
             HasChangedSpeed(20);
-        }else if(Physics.OverlapSphere(gameObject.transform.position,5f,7).Length == 0 && m_Zone == _Zone.SNOW){
+        }else if(Physics.OverlapSphere(gameObject.transform.position,5f,1<<7).Length == 0 && m_Zone == _Zone.SNOW){
             HasChangedZone("deepsnow");
             HasChangedSpeed(10);
         }
@@ -78,7 +78,6 @@ public class Player : MonoBehaviour
             if (m_Temperature > 0)
             {
                 m_Temperature -= (m_TemperatureLoss / 2) * Time.deltaTime;
-                Debug.Log(m_Temperature);
             }
         }
         if (m_Zone == _Zone.SAFEPLACE)
