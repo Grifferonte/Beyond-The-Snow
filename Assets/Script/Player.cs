@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     private _Zone m_Zone;
     private int m_Branch;
     private bool isColliding;
+    [SerializeField] List<Transform> m_Checkpoints = new List<Transform>();
+    private Transform m_CurrentCp;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +25,7 @@ public class Player : MonoBehaviour
         m_Zone = _Zone.DEEPSNOW;
         m_Branch = 0;
         isColliding = false;
+        m_CurrentCp = m_Checkpoints[0];
     }
 
     private void OnTriggerEnter(Collider col)
@@ -32,7 +35,6 @@ public class Player : MonoBehaviour
             if (isColliding) return;
             isColliding = true;
             m_Branch += 1;
-            Debug.Log(m_Branch);
             Destroy(col.gameObject);
         }
     }
@@ -41,7 +43,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         isColliding = false;
-        Debug.Log(Physics.OverlapSphere(gameObject.transform.position,5f,1<<7).Length);
         if(Physics.OverlapSphere(gameObject.transform.position,5f,1<<7).Length != 0 && m_Zone == _Zone.DEEPSNOW){
             HasChangedZone("snow");
             HasChangedSpeed(20);
@@ -55,13 +56,13 @@ public class Player : MonoBehaviour
             if (m_Branch >= 3)
             {
                 m_Branch -= 3;
-                Debug.Log(m_Branch);
                 m_Zone = _Zone.SAFEPLACE;
             }
         }
-        if (Input.GetKeyDown(KeyCode.V))
+        if(transform.position.z> m_CurrentCp.position.z + 5)
         {
-            HasChangedSpeed(120);
+            m_CurrentCp = m_Checkpoints[m_Checkpoints.IndexOf(m_CurrentCp)+1];
+            Debug.Log("more than cp");
         }
 
         #region ZoneConditions
@@ -136,6 +137,13 @@ public class Player : MonoBehaviour
             default: break;
         }
     }
+
+    public Transform getCheckpoint()
+    {
+        return m_CurrentCp;
+    }
+
+
 
     private void gameOver()
     {
