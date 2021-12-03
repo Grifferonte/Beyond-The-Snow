@@ -64,6 +64,7 @@ public class Player : MonoBehaviour
         if(transform.position.z> m_CurrentCp.position.z + 5)
         {
             goToNextCP();
+            outOfSafeZone();
         }
 
         #region ZoneConditions

@@ -14,12 +14,12 @@ public class checkpoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Vector3.Distance(player.transform.position,gameObject.transform.position)<5 && player.getBranchs()>3){
+        if(Vector3.Distance(player.transform.position,gameObject.transform.position)<5 && player.getBranchs()>=3){
             player.playerRest();
         }
-        if(Vector3.Distance(player.transform.position,gameObject.transform.position)>5){
-            player.outOfSafeZone();
-        }
+        // if(Vector3.Distance(player.transform.position,gameObject.transform.position)>5){
+        //     //player.outOfSafeZone();
+        // }
     }
 
 
