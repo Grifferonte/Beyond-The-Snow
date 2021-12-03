@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Player : MonoBehaviour
     private float m_HP;
     [SerializeField] private float m_HPMax;
     private float m_Temperature;
-    private float m_TemperatureLoss = 1 / (1.2f);
+    private float m_TemperatureLoss = 2;
     [SerializeField] private float m_TemperatureMax;
     private enum _Zone { SNOW, DEEPSNOW, SAFEPLACE };
     private _Zone m_Zone;
@@ -154,7 +155,7 @@ public class Player : MonoBehaviour
 
     private void gameOver()
     {
-        Debug.Log("Game Over");
+        SceneManager.LoadScene("Defaite");
     }
 
     private void goToNextCP(){
