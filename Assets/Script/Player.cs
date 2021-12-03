@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +19,9 @@ public class Player : MonoBehaviour
     [SerializeField] List<Transform> m_Checkpoints = new List<Transform>();
     private Transform m_CurrentCp;
     [SerializeField] Wolf wolf;
+    [SerializeField] Slider temperatureBar;
+    [SerializeField] Slider healthBar;
+    [SerializeField] Text valueBranch;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +32,7 @@ public class Player : MonoBehaviour
         m_Branch = 0;
         isColliding = false;
         m_CurrentCp = m_Checkpoints[0];
+        valueBranch.text = m_Branch.ToString();
     }
 
     private void OnTriggerEnter(Collider col)
@@ -37,6 +43,7 @@ public class Player : MonoBehaviour
             isColliding = true;
             m_Branch += 1;
             Destroy(col.gameObject);
+            valueBranch.text = m_Branch.ToString();
         }
     }
 
@@ -50,16 +57,10 @@ public class Player : MonoBehaviour
         }else if(Physics.OverlapSphere(gameObject.transform.position,5f,1<<7).Length == 0 && m_Zone == _Zone.SNOW){
             HasChangedZone("deepsnow");
             HasChangedSpeed(5);
+        }else if(m_Zone==_Zone.SAFEPLACE){
+            HasChangedSpeed(8);
         }
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (m_Branch >= 3)
-            {
-                m_Branch -= 3;
-                m_Zone = _Zone.SAFEPLACE;
-            }
-        }
         if(transform.position.z> m_CurrentCp.position.z + 5)
         {
             goToNextCP();
@@ -83,8 +84,11 @@ public class Player : MonoBehaviour
         }
         if (m_Zone == _Zone.SAFEPLACE)
         {
-            m_Temperature = 10 * Time.deltaTime;
+            m_Temperature = 100;
         }
+
+        temperatureBar.value = m_Temperature;
+
 
         #endregion
 
@@ -104,6 +108,8 @@ public class Player : MonoBehaviour
         {
             m_HP -= Time.deltaTime;
         }
+
+        healthBar.value = m_HP;
 
         if (m_HP <= 0)
         {
@@ -153,6 +159,20 @@ public class Player : MonoBehaviour
     private void goToNextCP(){
         m_CurrentCp = m_Checkpoints[m_Checkpoints.IndexOf(m_CurrentCp)+1];
         wolf.goToNextCPWolf();
+    }
+
+    public void playerRest(){
+        m_Zone = _Zone.SAFEPLACE;
+        m_Branch -=3;
+        valueBranch.text = m_Branch.ToString();
+    }
+
+    public void outOfSafeZone(){
+        m_Zone = _Zone.SNOW;
+    }
+
+    public int getBranchs(){
+        return m_Branch;
     }
 
 
