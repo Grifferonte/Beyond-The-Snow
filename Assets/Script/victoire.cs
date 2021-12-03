@@ -18,11 +18,13 @@ public class victoire : MonoBehaviour
     }
         public void RetourGame()
     {
+        Debug.Log("resume");
         SceneManager.LoadScene("Menu");
     }
 
     public void Quit()
     {
+        Debug.Log("quitte");
         Application.Quit();
     }
 }
