@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     private float m_HP;
     [SerializeField] private float m_HPMax;
     private float m_Temperature;
-    private float m_TemperatureLoss = 2;
+    private float m_TemperatureLoss = 3;
     [SerializeField] private float m_TemperatureMax;
     private enum _Zone { SNOW, DEEPSNOW, SAFEPLACE };
     private _Zone m_Zone;
